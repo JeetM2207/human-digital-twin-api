@@ -21,7 +21,22 @@ app = FastAPI(
     description="Predicts Risk Category (Low, Medium, High) from vital signs data",
     version="1.0.0"
 )
+# CORS: allow your frontend origin(s). For development include localhost:3000.
+# In production, replace or restrict origins to your real frontend domain(s).
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://your-frontend-domain.example",   # replace with your deployed frontend domain
+    "https://human-digital-twin-api.onrender.com"  # allow direct calls if needed
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,     # or ["*"] for testing only
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 MODEL_FILE = "hdt_vitals_model.pkl"
 SCALER_FILE = "hdt_vitals_scaler.pkl"
 
