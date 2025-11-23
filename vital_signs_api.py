@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 # --------------------------------------------------------------
 # Initialize FastAPI app
@@ -23,18 +24,19 @@ app = FastAPI(
 )
 # CORS: allow your frontend origin(s). For development include localhost:3000.
 # In production, replace or restrict origins to your real frontend domain(s).
+
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://your-frontend-domain.example",   # replace with your deployed frontend domain
-    "https://human-digital-twin-api.onrender.com"  # allow direct calls if needed
+    # add your production frontend URL(s) here:
+    "https://your-frontend-domain.example"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,     # or ["*"] for testing only
+    allow_origins=origins,     # or ["*"] for quick testing
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+    allow_methods=["GET","POST","OPTIONS","PUT","DELETE"],
     allow_headers=["*"],
 )
 MODEL_FILE = "hdt_vitals_model.pkl"
