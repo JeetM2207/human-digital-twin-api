@@ -3,8 +3,8 @@
 # Human Digital Twin (HDT) - Predictive Health Risk API using FastAPI
 # Dataset: Human Vital Signs Dataset (Kaggle)
 # --------------------------------------------------------------
-
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
-from fastapi.middleware.cors import CORSMiddleware
+
 
 # --------------------------------------------------------------
 # Initialize FastAPI app
