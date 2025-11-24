@@ -26,16 +26,12 @@ app = FastAPI(
 # In production, replace or restrict origins to your real frontend domain(s).
 
 origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    # add your production frontend URL(s) here:
-    "https://your-frontend-domain.example"
-    "https://human-digital-twin-frontend.vercel.app"
+  "https://human-digital-twin-frontend.vercel.app"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,     # or ["*"] for quick testing
+    allow_origins=*,     # or ["*"] for quick testing
     allow_credentials=True,
     allow_methods=["GET","POST","OPTIONS","PUT","DELETE"],
     allow_headers=["*"],
