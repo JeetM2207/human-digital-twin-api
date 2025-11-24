@@ -30,6 +30,7 @@ origins = [
     "http://127.0.0.1:3000",
     # add your production frontend URL(s) here:
     "https://your-frontend-domain.example"
+    "https://human-digital-twin-frontend.vercel.app"
 ]
 
 app.add_middleware(
