@@ -1,8 +1,4 @@
-# vital_signs_api.py
-# --------------------------------------------------------------
-# Human Digital Twin (HDT) - Predictive Health Risk API using FastAPI
-# Dataset: Human Vital Signs Dataset (Kaggle)
-# --------------------------------------------------------------
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -13,17 +9,12 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
 
-
-# --------------------------------------------------------------
-# Initialize FastAPI app
-# --------------------------------------------------------------
 app = FastAPI(
     title="Human Digital Twin - Vital Signs Prediction API",
     description="Predicts Risk Category (Low, Medium, High) from vital signs data",
     version="1.0.0"
 )
-# CORS: allow your frontend origin(s). For development include localhost:3000.
-# In production, replace or restrict origins to your real frontend domain(s).
+
 
 origins = [
   "https://human-digital-twin-frontend.vercel.app"
@@ -31,7 +22,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],     # or ["*"] for quick testing
+    allow_origins=["*"],     
     allow_credentials=True,
     allow_methods=["GET","POST","OPTIONS","PUT","DELETE"],
     allow_headers=["*"],
@@ -39,9 +30,7 @@ app.add_middleware(
 MODEL_FILE = "hdt_vitals_model.pkl"
 SCALER_FILE = "hdt_vitals_scaler.pkl"
 
-# --------------------------------------------------------------
-# Define input data schema
-# --------------------------------------------------------------
+
 class VitalSigns(BaseModel):
     HeartRate: float
     RespiratoryRate: float
@@ -54,16 +43,14 @@ class VitalSigns(BaseModel):
     Derived_BMI: float
 
 
-# --------------------------------------------------------------
-# Train or load ML model
-# --------------------------------------------------------------
-def train_model():
-    print("🔄 Training model on Human Vital Signs Dataset...")
 
-    # Load dataset
+def train_model():
+    print(" Training model on Human Vital Signs Dataset...")
+
+    
     df = pd.read_csv("human_vital_signs_dataset_2024.csv")
 
-    # Select features and target
+    
     X = df[[
         "Heart Rate",
         "Respiratory Rate",
@@ -77,21 +64,21 @@ def train_model():
     ]]
     y = df["Risk Category"]
 
-    # Train-test split
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Scale features
+    
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
 
-    # Train model
+    
     model = RandomForestClassifier(n_estimators=120, random_state=42)
     model.fit(X_train_scaled, y_train)
 
-    # Save model and scaler
+    
     joblib.dump(model, MODEL_FILE)
     joblib.dump(scaler, SCALER_FILE)
-    print("✅ Model trained and saved successfully!")
+    print(" Model trained and saved successfully!")
 
 
 def load_model():
@@ -99,16 +86,14 @@ def load_model():
         train_model()
     model = joblib.load(MODEL_FILE)
     scaler = joblib.load(SCALER_FILE)
-    print("✅ Model loaded successfully!")
+    print(" Model loaded successfully!")
     return model, scaler
 
 
 model, scaler = load_model()
 
 
-# --------------------------------------------------------------
-# API Endpoints
-# --------------------------------------------------------------
+
 @app.get("/")
 def root():
     return {
@@ -156,7 +141,4 @@ def predict(vitals: VitalSigns):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# --------------------------------------------------------------
-# Run using:
-# uvicorn vital_signs_api:app --reload
-# --------------------------------------------------------------
+
